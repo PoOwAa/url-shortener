@@ -1,0 +1,30 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #6e8792;
+}
+
+.bg-first {
+  background-color: #413644;
+}
+
+.masthead {
+  height: 100vh;
+  min-height: 500px;
+  background-image: url("https://source.unsplash.com/BtbjCFUvBXs/1920x1080");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.btn-short {
+  color: #ffffff;
+  background-color: #b3c7bb;
+  border-color: #b3c7bb;
+}
+
+.btn-short:hover {
+  background-color: #82a791;
+}

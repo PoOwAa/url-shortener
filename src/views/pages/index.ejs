@@ -1,0 +1,30 @@
+<% include ../partials/head %>
+<body>
+  <% include ../partials/header %>
+  <div class="masthead">
+    <div class="container h-100">
+      <div class="row h-100 align-items-center">
+        <div class="col-12 text-center">
+          <img src="/images/dark-logo.png" alt="" />
+          <p class="lead"></p>
+          <form action="shortUrl" method="POST">
+            <div class="form-group">
+              <label for="longUrl">Just paste your url here:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="longUrl"
+                name="longUrl"
+                aria-describedby="longUrlHelp"
+                placeholder="https://example.com/it-is-a-pretty-long-url-which-can-be-hardly-memorized-because-of-random-FA162BCADE-strings"
+              />
+              <small id="longUrlHelp" class="form-text text-muted"></small>
+            </div>
+            <button type="submit" class="btn btn-short">Short me!</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% include ../partials/footer %>
+</body>
