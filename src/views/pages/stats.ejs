@@ -20,9 +20,16 @@
         <div class="col-3 text-center">
           <div id="chartBrowserCount"></div>
         </div>
-        <div class="col-3 text-center"></div>
+        <div class="col-3 text-center">
+          <div id="chartOsCount"></div>
+        </div>
         <div class="col-3 text-center">
           <% url %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div id="chartTimeLine"></div>
         </div>
       </div>
     </div>
@@ -52,6 +59,33 @@
       var statistics = JSON.parse(dataStr);
 
       drawBrowserCount(statistics);
+      drawOsCount(statistics);
+      drawTimeLine(statistics);
+    }
+
+    function drawTimeLine(rawData) {
+      const data = rawData.reduce(
+        (entryMap, e) =>
+          entryMap.set(new Date(e.createdAt).toISOString().split('T')[0], [
+            ...(entryMap.get(
+              new Date(e.createdAt).toISOString().split('T')[0]
+            ) || []),
+            1
+          ]),
+        new Map()
+      );
+      const dataTable = new google.visualization.DataTable();
+      dataTable.addColumn('string', 'ClickDate');
+      dataTable.addColumn('number', 'Clicks');
+      dataTable.addRows(
+        Array.from(data, ([key, value]) => [key, value.length])
+      );
+
+      const chart = new google.visualization.LineChart(
+        document.getElementById('chartTimeLine')
+      );
+
+      chart.draw(dataTable, { title: 'Clicks by time' });
     }
 
     function drawBrowserCount(data) {
@@ -77,6 +111,28 @@
       );
 
       chart.draw(browserPieChart, options);
+    }
+
+    function drawOsCount(data) {
+      const osStat = counter(data, 'os');
+      const osPieChart = new google.visualization.DataTable();
+      osPieChart.addColumn('string', 'Operating system');
+      osPieChart.addColumn('number', 'Count');
+      const stats = [];
+      for (const os in osStat) {
+        stats.push([os, osStat[os]]);
+      }
+      osPieChart.addRows(stats);
+
+      const options = {
+        title: 'Operating Systems'
+      };
+
+      const chart = new google.visualization.PieChart(
+        document.getElementById('chartOsCount')
+      );
+
+      chart.draw(osPieChart, options);
     }
   </script>
 </body>
