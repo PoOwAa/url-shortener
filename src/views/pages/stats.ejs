@@ -2,20 +2,81 @@
 <body>
   <% include ../partials/header %>
   <div class="masthead">
-    <div class="container h-100">
-      <div class="row h-100 align-items-center">
-        <div class="col-12 text-center">
-          <img src="/images/dark-logo.png" alt="" />
-        </div>
-        <div class="col-12 text-center">
+    <div class="container-fluid">
+      <div class="row text-center" style="margin-top: 50px;">
+        <div class="col-12">
           <h1>Statistics</h1>
-          <p class="lead">
-            Clicks: <%= url.clicks %>
-          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3 text-center">
+          <div class="card">
+            <div class="card-body">
+              Clicks: <%= url.clicks %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-3 text-center">
+          <div id="chartBrowserCount"></div>
+        </div>
+        <div class="col-3 text-center"></div>
+        <div class="col-3 text-center">
           <% url %>
         </div>
       </div>
     </div>
   </div>
   <% include ../partials/footer %>
+  <script
+    type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"
+  ></script>
+  <script type="text/javascript">
+    google.charts.load('current', { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(draw);
+
+    function counter(data, key) {
+      return data.reduce((acc, item) => {
+        if (!acc[item.userAgent[key]]) {
+          acc[item.userAgent[key]] = 0;
+        }
+        acc[item.userAgent[key]]++;
+
+        return acc;
+      }, {});
+    }
+
+    function draw() {
+      var dataStr = '<%- JSON.stringify(stats) %>';
+      var statistics = JSON.parse(dataStr);
+
+      drawBrowserCount(statistics);
+    }
+
+    function drawBrowserCount(data) {
+      const browserStat = counter(data, 'browser');
+
+      const browserPieChart = new google.visualization.DataTable();
+
+      browserPieChart.addColumn('string', 'Browser');
+      browserPieChart.addColumn('number', 'Count');
+
+      const stats = [];
+      for (const browser in browserStat) {
+        stats.push([browser, browserStat[browser]]);
+      }
+      browserPieChart.addRows(stats);
+
+      var options = {
+        title: 'Browser users'
+      };
+
+      var chart = new google.visualization.PieChart(
+        document.getElementById('chartBrowserCount')
+      );
+
+      chart.draw(browserPieChart, options);
+    }
+  </script>
 </body>

@@ -1,5 +1,6 @@
 const shortId = require("shortid");
 const URL = require("../models/uris.model");
+const Statistics = require("../models/statistics.model");
 const validator = require("validator");
 
 class UrlHandler {
@@ -24,6 +25,20 @@ class UrlHandler {
   async clicked(urlModel) {
     urlModel.clicks++;
     urlModel.save();
+  }
+
+  async saveStats(shortUrl, userAgent) {
+    const stat = new Statistics({
+      shortUrl,
+      userAgent
+    });
+    stat.save();
+  }
+
+  async getStatistics(shortUrl) {
+    return Statistics.find({
+      shortUrl
+    });
   }
 }
 
