@@ -5,11 +5,19 @@ const title = 'Url Shortener';
 const validator = require('validator');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('pages/index', { title });
 });
 
-router.post('/shortUrl', async function(req, res, next) {
+router.get('/features', function (req, res, next) {
+  try {
+    res.render('pages/features', { title });
+  } catch (e) {
+    res.render('pages/saveError', { title, message: e.message });
+  }
+});
+
+router.post('/shortUrl', async function (req, res, next) {
   try {
     if (!req.body.longUrl) {
       throw new Error('There is nothing to shorten!');
@@ -25,7 +33,7 @@ router.post('/shortUrl', async function(req, res, next) {
   }
 });
 
-router.get('/:shortUrl/stats', async function(req, res, next) {
+router.get('/:shortUrl/stats', async function (req, res, next) {
   const shortUrl = req.params.shortUrl;
 
   try {
@@ -48,7 +56,7 @@ router.get('/:shortUrl/stats', async function(req, res, next) {
   }
 });
 
-router.get('/:shortUrl', async function(req, res, next) {
+router.get('/:shortUrl', async function (req, res, next) {
   const shortUrl = req.params.shortUrl;
 
   try {
@@ -66,5 +74,4 @@ router.get('/:shortUrl', async function(req, res, next) {
     res.render('pages/saveError', { title, message: e.message });
   }
 });
-
 module.exports = router;
