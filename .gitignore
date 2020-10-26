@@ -118,3 +118,6 @@ temp/
 # End of https://www.gitignore.io/api/node,code
 
 !.gitkeep
+
+# OSX things...
+.DS_STORE
